@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Own watch face - LEDs</string>
+    <string name="crash">I crashed :(</string>
+    <string name="action_settings">Settings</string>
+    <string name="subtitle">103</string>
+    <string name="clock">Clock</string>
+    <string name="clocknosecs">Clock No Secs</string>
+    <string name="marker">AM/PM</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="temp">Temp</string>
+    <string name="weather">Weather</string>
+    <string name="active">show active</string>
+    <string name="ambient">show ambient</string>
+    <string name="interactive">show interactive</string>
+    <string name="always_show_utc">always show timestamp in UTC</string>
+    <string name="show_time">Show timestamp?</string>
+    <string name="northernhemi">Are you in Northern Hemispere?</string>	
+    <string name="use_short_cards">use short notification cards</string>
+    <string name="apply">Apply Changes</string>
+    <string name="reset">Reset to Default</string>
+    <string name="getweather">Get Weather</string>
+    <string name="refreshweather">Refresh Weather</string>
+    <string name="visitnws">Visit NWS Forecast page</string>
+	
+</resources>
