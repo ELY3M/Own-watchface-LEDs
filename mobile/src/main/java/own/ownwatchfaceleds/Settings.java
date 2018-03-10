@@ -34,9 +34,9 @@ public class Settings {
     public static final String KEY_WEATHER_SIZE = "weather_size";
     public static final String KEY_WEATHER_DIM = "weather_dim";
     public static final String KEY_WEATHER_UPDATE_TIME = "Update_Time";
-    public static final String PATH_CONFIG = "/WeatherWatchFace/Config/";
-    public static final String PATH_WEATHER_INFO = "/WeatherWatchFace/WeatherInfo";
-    public static final String PATH_WEATHER_REQUIRE = "/WeatherService/Require";
+    public static final String PATH_CONFIG = "/ownwatchfaceleds/Config/";
+    public static final String PATH_WEATHER_INFO = "/ownwatchfaceleds/WeatherInfo";
+    public static final String PATH_WEATHER_REQUIRE = "/ownwatchfaceleds/Require";
 
 
 
