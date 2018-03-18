@@ -65,7 +65,8 @@ public class handlejson {
                     URL url = new URL(urlString);
                     HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 
-                    conn.setRequestProperty("User-Agent", "firefox");
+                    Log.d(TAG, "@string/agent");
+                    conn.setRequestProperty("User-Agent", "@string/agent");
                     conn.setRequestProperty("Accept", "application/vnd.noaa.dwml+xml;version=1");
 
                     conn.setReadTimeout(10000 /* milliseconds */);

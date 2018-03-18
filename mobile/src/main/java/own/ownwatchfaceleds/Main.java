@@ -94,6 +94,7 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
     public boolean timeDim = false;
     public boolean tempDim = false;
     public boolean weatherDim = false;
+    public boolean temponright = true;
     public boolean alwaysUtc = true;
     public boolean showtime = false;
     public boolean northernhemi = true;
@@ -115,6 +116,7 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
     private CheckBox timeCheckBox;
     private CheckBox tempCheckBox;
     private CheckBox weatherCheckBox;
+    private CheckBox temponrightCheckBox;
     private CheckBox alwaysUtcCheckBox;
     private CheckBox showtimeCheckBox;
     private CheckBox northernhemiCheckBox;
@@ -187,6 +189,7 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
         timeCheckBox = (CheckBox) findViewById(R.id.timeCheckBox);
         tempCheckBox = (CheckBox) findViewById(R.id.tempCheckBox);
         weatherCheckBox = (CheckBox) findViewById(R.id.weatherCheckBox);
+        temponrightCheckBox = (CheckBox) findViewById(R.id.temponrightCheckBox);
         alwaysUtcCheckBox = (CheckBox) findViewById(R.id.alwaysUtcCheckBox);
         showtimeCheckBox = (CheckBox) findViewById(R.id.showtimeCheckBox);
         northernhemiCheckBox = (CheckBox) findViewById(R.id.northernhemiCheckBox);
@@ -342,6 +345,7 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
         Settings.setBoolean(this, Settings.KEY_TIME_DIM, timeCheckBox.isChecked());
         Settings.setBoolean(this, Settings.KEY_TEMP_DIM, tempCheckBox.isChecked());
         Settings.setBoolean(this, Settings.KEY_WEATHER_DIM, weatherCheckBox.isChecked());
+        Settings.setBoolean(this, Settings.KEY_TEMPONRIGHT, temponrightCheckBox.isChecked());
         Settings.setBoolean(this, Settings.KEY_ALWAYS_UTC, alwaysUtcCheckBox.isChecked());
         Settings.setBoolean(this, Settings.KEY_SHOW_TIME, showtimeCheckBox.isChecked());
         Settings.setBoolean(this, Settings.KEY_NORTHERNHEMI, northernhemiCheckBox.isChecked());
@@ -374,6 +378,7 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
         timeCheckBox.setChecked(Settings.getBoolean(this, Settings.KEY_TIME_DIM, timeDim));
         tempCheckBox.setChecked(Settings.getBoolean(this, Settings.KEY_TEMP_DIM, tempDim));
         weatherCheckBox.setChecked(Settings.getBoolean(this, Settings.KEY_WEATHER_DIM, weatherDim));
+        temponrightCheckBox.setChecked(Settings.getBoolean(this, Settings.KEY_TEMPONRIGHT, temponright));
         alwaysUtcCheckBox.setChecked(Settings.getBoolean(this, Settings.KEY_ALWAYS_UTC, alwaysUtc));
         showtimeCheckBox.setChecked(Settings.getBoolean(this, Settings.KEY_SHOW_TIME, showtime));
         northernhemiCheckBox.setChecked(Settings.getBoolean(this, Settings.KEY_NORTHERNHEMI, northernhemi));
@@ -406,6 +411,7 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
         timeDim = timeCheckBox.isChecked();
         tempDim = tempCheckBox.isChecked();
         weatherDim = weatherCheckBox.isChecked();
+        temponright = temponrightCheckBox.isChecked();
         alwaysUtc = alwaysUtcCheckBox.isChecked();
         showtime = showtimeCheckBox.isChecked();
         northernhemi = northernhemiCheckBox.isChecked();
@@ -428,6 +434,7 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
         dataMap.putBoolean(Settings.KEY_TIME_DIM, timeDim);
         dataMap.putBoolean(Settings.KEY_TEMP_DIM, tempDim);
         dataMap.putBoolean(Settings.KEY_WEATHER_DIM, weatherDim);
+        dataMap.putBoolean(Settings.KEY_TEMPONRIGHT, temponright);
         dataMap.putBoolean(Settings.KEY_ALWAYS_UTC, alwaysUtc);
         dataMap.putBoolean(Settings.KEY_SHOW_TIME, showtime);
         dataMap.putBoolean(Settings.KEY_NORTHERNHEMI, northernhemi);

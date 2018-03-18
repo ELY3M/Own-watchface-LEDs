@@ -164,6 +164,7 @@ public class WatchFace extends CanvasWatchFaceService  {
         public boolean timeDim = false;
         public boolean tempDim = false;
         public boolean weatherDim = false;
+        public boolean temponright = true;
         public boolean alwaysUtc = true;
         public boolean showtime = false;
         public boolean northernhemi = true;
@@ -423,6 +424,7 @@ public class WatchFace extends CanvasWatchFaceService  {
             timeDim = Settings.getBoolean(context, Settings.KEY_TIME_DIM, timeDim);
             tempDim = Settings.getBoolean(context, Settings.KEY_TEMP_DIM, tempDim);
             weatherDim = Settings.getBoolean(context, Settings.KEY_WEATHER_DIM, weatherDim);
+            temponright = Settings.getBoolean(context, Settings.KEY_TEMPONRIGHT, temponright);
             alwaysUtc = Settings.getBoolean(context, Settings.KEY_ALWAYS_UTC, alwaysUtc);
             showtime = Settings.getBoolean(context, Settings.KEY_SHOW_TIME, showtime);
             northernhemi = Settings.getBoolean(context, Settings.KEY_NORTHERNHEMI, northernhemi);
@@ -592,9 +594,13 @@ public class WatchFace extends CanvasWatchFaceService  {
             xTimestamp = width / 2f;
             yTimestamp = height - 4;
 
-            xTemp = 50;
-            yTemp = height - 80;
-
+            if (temponright) {
+                xTemp = (width / 2f) + 90;
+                yTemp = height - 80;
+            } else {
+                xTemp = 50;
+                yTemp = height - 80;
+            }
             xWeather = width / 2f;
             yWeather = height - 30;
 
@@ -848,6 +854,11 @@ public class WatchFace extends CanvasWatchFaceService  {
             if (config.containsKey(Settings.KEY_WEATHER_DIM)) {
                 weatherDim = config.getBoolean(Settings.KEY_WEATHER_DIM);
                 Log.d(TAG, "weatherDim: "+weatherDim);
+
+            }
+            if (config.containsKey(Settings.KEY_TEMPONRIGHT)) {
+                temponright = config.getBoolean(Settings.KEY_TEMPONRIGHT);
+                Log.d(TAG, "temponright: "+temponright);
 
             }
             if (config.containsKey(Settings.KEY_ALWAYS_UTC)) {

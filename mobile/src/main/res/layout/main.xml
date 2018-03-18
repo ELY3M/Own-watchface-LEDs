@@ -253,6 +253,14 @@
             android:orientation="vertical">
             <CheckBox
                 android:button="@drawable/cyancheck"
+                android:id="@+id/temponrightCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/aqua"
+                android:checked="false"
+                android:text="@string/temponright"/>
+            <CheckBox
+                android:button="@drawable/cyancheck"
                 android:id="@+id/alwaysUtcCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

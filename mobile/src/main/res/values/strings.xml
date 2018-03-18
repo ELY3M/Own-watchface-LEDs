@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">Own watch face - LEDs</string>
+    <string name="agent">my own written app email: elymbmx@gmail.com</string>
     <string name="crash">I crashed :(</string>
     <string name="action_settings">Settings</string>
     <string name="subtitle">103</string>
@@ -15,6 +16,7 @@
     <string name="active">show active</string>
     <string name="ambient">show ambient</string>
     <string name="interactive">show interactive</string>
+    <string name="temponright">Temp on right of weather icon</string>
     <string name="always_show_utc">always show timestamp in UTC</string>
     <string name="show_time">Show timestamp?</string>
     <string name="northernhemi">Are you in Northern Hemispere?</string>	

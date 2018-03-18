@@ -33,6 +33,7 @@ public class Settings {
     public static final String KEY_DATE_DIM = "date_dim";
     public static final String KEY_TIME_SIZE = "time_size";
     public static final String KEY_TIME_DIM = "time_dim";
+    public static final String KEY_TEMPONRIGHT = "temponright";
     public static final String KEY_ALWAYS_UTC = "always_utc";
     public static final String KEY_SHOW_TIME = "show_time";
     public static final String KEY_NORTHERNHEMI = "northernhemi";
