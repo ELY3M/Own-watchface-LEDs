@@ -111,6 +111,10 @@ public class WatchFace extends CanvasWatchFaceService  {
         float mXOffset;
         float mYOffset;
         float mPadding;
+        int width;
+        int height;
+        float centerX;
+        float centerY;
 
         SimpleDateFormat timeSdf;
         SimpleDateFormat timenosecsSdf;
@@ -447,16 +451,21 @@ public class WatchFace extends CanvasWatchFaceService  {
 
         @Override
         public void onTapCommand(int tapType, int x, int y, long eventTime) {
-            Log.d(TAG, "onTapCommand tapType: "+tapType+ "x: "+x+"y: "+y+"eventTime: "+eventTime);
+            Log.d(TAG, "onTapCommand tapType: "+tapType+ " x: "+x+" y: "+y+" eventTime: "+eventTime);
             switch(tapType) {
                 case TAP_TYPE_TAP:
-                    // toggle UTC display
-                    if(!showtime) {
-                        Log.d(TAG, "Tap showtime is true");
-                        showtime = true;
-                    } else {
-                        Log.d(TAG, "Tap showtime is false");
-                        showtime = false;
+                        //x 30-width
+                        //y 275-height
+                        // toggle UTC display
+                    if (x > 30 && y > 263) {
+                        Log.d(TAG, "onTapCommand toggle UTC display");
+                        if (!showtime) {
+                            Log.d(TAG, "Tap showtime is true");
+                            showtime = true;
+                        } else {
+                            Log.d(TAG, "Tap showtime is false");
+                            showtime = false;
+                        }
                     }
                     invalidate();
                     break;
@@ -527,10 +536,10 @@ public class WatchFace extends CanvasWatchFaceService  {
             mTempPaint.setTextAlign(Paint.Align.CENTER);
             mWeatherPaint.setTextAlign(Paint.Align.CENTER);
 
-            int width = bounds.width();
-            int height = bounds.height();
-            float centerX = width / 2f;
-            float centerY = height / 2f;
+            width = bounds.width();
+            height = bounds.height();
+            centerX = width / 2f;
+            centerY = height / 2f;
 
             // Draw the background.
             if (isInAmbientMode()) {
