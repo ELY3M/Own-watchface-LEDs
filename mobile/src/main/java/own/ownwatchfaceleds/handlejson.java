@@ -21,6 +21,7 @@ import android.util.Log;
 public class handlejson {
 
     private static final String TAG = "ownwatchface handlejson";
+    private String agent = "my own written app email: elymbmx@gmail.com";
     private String temp = "Temp";
     private String weather = "Weather";
     private String icon = "Weatherimage";
@@ -64,9 +65,8 @@ public class handlejson {
                 try {
                     URL url = new URL(urlString);
                     HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-
-                    Log.d(TAG, "@string/agent");
-                    conn.setRequestProperty("User-Agent", "@string/agent");
+                    Log.d(TAG, agent);
+                    conn.setRequestProperty("User-Agent", agent);
                     conn.setRequestProperty("Accept", "application/vnd.noaa.dwml+xml;version=1");
 
                     conn.setReadTimeout(10000 /* milliseconds */);

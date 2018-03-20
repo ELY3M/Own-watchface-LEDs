@@ -454,10 +454,15 @@ public class WatchFace extends CanvasWatchFaceService  {
             Log.d(TAG, "onTapCommand tapType: "+tapType+ " x: "+x+" y: "+y+" eventTime: "+eventTime);
             switch(tapType) {
                 case TAP_TYPE_TAP:
+                        //manual update weather
+                    if (x > 3 && y > 143 && y < 263) {
+                        Log.d(TAG, "onTapCommand Update Weather");
+                        ManualWeatherUpdate();
+                    }
                         //x 30-width
-                        //y 275-height
+                        //y 263-height
                         // toggle UTC display
-                    if (x > 30 && y > 263) {
+                    if (x > 3 && y > 263) {
                         Log.d(TAG, "onTapCommand toggle UTC display");
                         if (!showtime) {
                             Log.d(TAG, "Tap showtime is true");
@@ -1029,19 +1034,38 @@ public class WatchFace extends CanvasWatchFaceService  {
             WatchFace.this.unregisterReceiver(TimeZoneReceiver);
         }
 
-        protected void requireWeatherInfo() {
-            if (!mGoogleApiClient.isConnected())
+        protected void ManualWeatherUpdate() {
+            Log.d(TAG, "ManualWeatherUpdate()");
+            if (!mGoogleApiClient.isConnected()) {
                 return;
+            }
+            mWeatherInfoRequiredTime = System.currentTimeMillis();
+            Wearable.MessageApi.sendMessage(mGoogleApiClient, "", Settings.PATH_WEATHER_REQUIRE, null)
+                    .setResultCallback(new ResultCallback<MessageApi.SendMessageResult>() {
+                        @Override
+                        public void onResult(MessageApi.SendMessageResult sendMessageResult) {
+                            Log.d(TAG, " SendRequireMessage:" + sendMessageResult.getStatus());
+                        }
+                    });
+        }
+
+        protected void requireWeatherInfo() {
+            Log.d(TAG, "requireWeatherInfo()");
+            if (!mGoogleApiClient.isConnected()) {
+                return;
+            }
 
             long timeMs = System.currentTimeMillis();
 
             // The weather info is still up to date.
-            if ((timeMs - mWeatherInfoReceivedTime) <= mWeatherRequireInterval)
+            if ((timeMs - mWeatherInfoReceivedTime) <= mWeatherRequireInterval) {
                 return;
+            }
 
             // Try once in a min.
-            if ((timeMs - mWeatherInfoRequiredTime) <= DateUtils.MINUTE_IN_MILLIS)
+            if ((timeMs - mWeatherInfoRequiredTime) <= DateUtils.MINUTE_IN_MILLIS) {
                 return;
+            }
 
             mWeatherInfoRequiredTime = timeMs;
             Wearable.MessageApi.sendMessage(mGoogleApiClient, "", Settings.PATH_WEATHER_REQUIRE, null)
