@@ -168,7 +168,7 @@ public class WatchFace extends CanvasWatchFaceService  {
         public boolean timeDim = false;
         public boolean tempDim = false;
         public boolean weatherDim = false;
-        public boolean temponright = true;
+        public boolean temponright = false;
         public boolean alwaysUtc = true;
         public boolean showtime = false;
         public boolean northernhemi = true;

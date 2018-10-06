@@ -94,7 +94,7 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
     public boolean timeDim = false;
     public boolean tempDim = false;
     public boolean weatherDim = false;
-    public boolean temponright = true;
+    public boolean temponright = false;
     public boolean alwaysUtc = true;
     public boolean showtime = false;
     public boolean northernhemi = true;
