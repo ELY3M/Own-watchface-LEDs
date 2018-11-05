@@ -492,8 +492,6 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
                     finalicon = geticon.group(1);
                 }
 
-                //if (mytemp != "NA") {
-                //if (!"NA".equals(mytemp))
                 if(!mytemp.equals("NA"))
                 {
                     double finaltemp = Math.ceil(Double.valueOf(mytemp));
