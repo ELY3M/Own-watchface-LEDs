@@ -1227,7 +1227,7 @@ public class WatchFace extends CanvasWatchFaceService  {
             float setclock = 3.0f;
             Resources resources = WatchFace.this.getResources();
             String textTime = new SimpleDateFormat("hh:mm:ss").format(new Date());
-            int ampm = Calendar.getInstance().get(9);
+            int ampm = Calendar.getInstance().get(Calendar.AM_PM);
             String logstring = textTime + " " + ampm;
             Log.i(TAG, "my screen size: width: " + width + " height: " + height);
             Log.i(TAG, "My Clock Image built with " + logstring);

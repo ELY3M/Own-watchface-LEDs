@@ -8,6 +8,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -210,7 +211,7 @@ public class WeatherService extends WearableListenerService
 				String LogString = "Temp : " + mytemp + " Icon: " + myicon + " Weather: " + myweather + "\nLast Update: " + mytimestamp + "\nUpdate Count: " + updatecount;
 				Log.i(TAG, LogString);
 				try {
-					FileWriter writer = new FileWriter("/sdcard/swarm-updates.txt", true);
+					FileWriter writer = new FileWriter(Environment.getExternalStorageDirectory().getAbsolutePath() + "/ownwatchleds-updates.txt", true);
 					BufferedWriter bufferedWriter = new BufferedWriter(writer);
 					bufferedWriter.write(LogString);
 					bufferedWriter.newLine();
