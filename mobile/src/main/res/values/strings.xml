@@ -19,7 +19,8 @@
     <string name="temponright">Temp on right of weather icon</string>
     <string name="always_show_utc">always show timestamp in UTC</string>
     <string name="show_time">Show timestamp?</string>
-    <string name="northernhemi">Are you in Northern Hemispere?</string>	
+    <string name="northernhemi">Are you in Northern Hemispere?</string>
+    <string name="roundwatch">Is your watch round?</string>
     <string name="use_short_cards">use short notification cards</string>
     <string name="apply">Apply Changes</string>
     <string name="reset">Reset to Default</string>

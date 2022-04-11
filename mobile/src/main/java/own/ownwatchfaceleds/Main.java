@@ -98,6 +98,7 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
     public boolean alwaysUtc = true;
     public boolean showtime = false;
     public boolean northernhemi = true;
+    public boolean roundwatch = false;
 
     private EditText clockSizeEditText;
     private EditText clocknosecsSizeEditText;
@@ -120,7 +121,7 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
     private CheckBox alwaysUtcCheckBox;
     private CheckBox showtimeCheckBox;
     private CheckBox northernhemiCheckBox;
-
+    private CheckBox roundwatchCheckBox;
 
     private TextView mygps;
     private double lat = 0.0;
@@ -171,7 +172,6 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
         mPeerId = getIntent().getStringExtra(WatchFaceCompanion.EXTRA_PEER_ID);
         Log.d(TAG, "mPeerid: " + mPeerId);
 
-
         clockSizeEditText = (EditText) findViewById(R.id.clockSizeEditText);
         clocknosecsSizeEditText = (EditText) findViewById(R.id.clocknosecsSizeEditText);
         markerSizeEditText = (EditText) findViewById(R.id.markerSizeEditText);
@@ -193,6 +193,7 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
         alwaysUtcCheckBox = (CheckBox) findViewById(R.id.alwaysUtcCheckBox);
         showtimeCheckBox = (CheckBox) findViewById(R.id.showtimeCheckBox);
         northernhemiCheckBox = (CheckBox) findViewById(R.id.northernhemiCheckBox);
+        roundwatchCheckBox = (CheckBox) findViewById(R.id.roundwatchCheckBox);
         applyButton = (Button) findViewById(R.id.applyButton);
         resetButton = (Button) findViewById(R.id.resetButton);
         getweather = (Button) findViewById(R.id.getweather);
@@ -235,6 +236,7 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
             @Override public void onClick(View v) {
                 saveValues();
                 pushValuesToWearable();
+                Toast.makeText(Main.this, "Changes Applied!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -349,6 +351,7 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
         Settings.setBoolean(this, Settings.KEY_ALWAYS_UTC, alwaysUtcCheckBox.isChecked());
         Settings.setBoolean(this, Settings.KEY_SHOW_TIME, showtimeCheckBox.isChecked());
         Settings.setBoolean(this, Settings.KEY_NORTHERNHEMI, northernhemiCheckBox.isChecked());
+        Settings.setBoolean(this, Settings.KEY_ROUNDWATCH, roundwatchCheckBox.isChecked());
         Settings.setString(this, Settings.KEY_LAT, mylat);
         Settings.setString(this, Settings.KEY_LON, mylon);
         //Settings.setString(this, Settings.KEY_TEMP, mytemp);
@@ -382,6 +385,7 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
         alwaysUtcCheckBox.setChecked(Settings.getBoolean(this, Settings.KEY_ALWAYS_UTC, alwaysUtc));
         showtimeCheckBox.setChecked(Settings.getBoolean(this, Settings.KEY_SHOW_TIME, showtime));
         northernhemiCheckBox.setChecked(Settings.getBoolean(this, Settings.KEY_NORTHERNHEMI, northernhemi));
+        roundwatchCheckBox.setChecked(Settings.getBoolean(this, Settings.KEY_ROUNDWATCH, roundwatch));
 
     }
 
@@ -415,6 +419,7 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
         alwaysUtc = alwaysUtcCheckBox.isChecked();
         showtime = showtimeCheckBox.isChecked();
         northernhemi = northernhemiCheckBox.isChecked();
+        roundwatch = roundwatchCheckBox.isChecked();
 
         DataMap dataMap = new DataMap();
         dataMap.putInt(Settings.KEY_CLOCK_SIZE, clockSize);
@@ -438,6 +443,7 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
         dataMap.putBoolean(Settings.KEY_ALWAYS_UTC, alwaysUtc);
         dataMap.putBoolean(Settings.KEY_SHOW_TIME, showtime);
         dataMap.putBoolean(Settings.KEY_NORTHERNHEMI, northernhemi);
+        dataMap.putBoolean(Settings.KEY_ROUNDWATCH, roundwatch);
         dataMap.putString(Settings.KEY_LAT, mylat);
         dataMap.putString(Settings.KEY_LON, mylon);
         //dataMap.putString(Settings.KEY_TEMP, mytemp);

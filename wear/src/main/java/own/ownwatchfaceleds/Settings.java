@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -20,6 +20,7 @@ import com.google.android.gms.wearable.Wearable;
 public class Settings {
     public static final String TAG = "ownwatchface";
     public static final int weatherinterval = 1800000;
+    public static final String KEY_ROUNDWATCH = "roundwatch";
     public static final String KEY_CLOCK_SIZE = "clock_size";
     public static final String KEY_CLOCK_ACT = "clock_act";
     public static final String KEY_CLOCK_DIM = "clock_dim";

@@ -27,6 +27,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="horizontal">
+
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -283,6 +285,14 @@
                 android:textColor="@color/aqua"
                 android:text="@string/northernhemi"
                 android:id="@+id/northernhemiCheckBox" />
+
+            <CheckBox
+                android:button="@drawable/cyancheck"
+                android:layout_width="245dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/aqua"
+                android:text="@string/roundwatch"
+                android:id="@+id/roundwatchCheckBox" />
 
         </LinearLayout>
         <LinearLayout

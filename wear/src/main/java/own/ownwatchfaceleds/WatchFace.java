@@ -42,6 +42,7 @@ import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
+import com.google.android.gms.wearable.NodeClient;
 import com.google.android.gms.wearable.Wearable;
 
 import java.text.SimpleDateFormat;
@@ -62,7 +63,7 @@ public class WatchFace extends CanvasWatchFaceService  {
     }
 
 
-    private class Engine extends CanvasWatchFaceService.Engine implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, DataApi.DataListener, NodeApi.NodeListener {
+    private class Engine extends CanvasWatchFaceService.Engine implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, DataApi.DataListener /*, NodeApi.NodeListener*/ {
 
 
 
@@ -172,6 +173,7 @@ public class WatchFace extends CanvasWatchFaceService  {
         public boolean alwaysUtc = true;
         public boolean showtime = false;
         public boolean northernhemi = true;
+        public boolean roundwatch = false;
 
 
         boolean mTimeZoneReceiver = false;
@@ -230,7 +232,7 @@ public class WatchFace extends CanvasWatchFaceService  {
             Log.d(TAG, "Connected: " + bundle);
             getWeather();
             getConfig();
-            Wearable.NodeApi.addListener(mGoogleApiClient, this);
+            //Wearable.NodeApi.addListener(mGoogleApiClient, this);
             Wearable.DataApi.addListener(mGoogleApiClient, this);
             requireWeatherInfo();
         }
@@ -288,16 +290,7 @@ public class WatchFace extends CanvasWatchFaceService  {
 
         }
 
-        @Override
-        public void onPeerConnected(Node node) {
-            Log.d(TAG, "PeerConnected: " + node);
-            requireWeatherInfo();
-        }
 
-        @Override
-        public void onPeerDisconnected(Node node) {
-            Log.d(TAG, " PeerDisconnected: " + node);
-        }
 
         @Override
         public void onConnectionFailed(ConnectionResult connectionResult) {
@@ -432,12 +425,14 @@ public class WatchFace extends CanvasWatchFaceService  {
             alwaysUtc = Settings.getBoolean(context, Settings.KEY_ALWAYS_UTC, alwaysUtc);
             showtime = Settings.getBoolean(context, Settings.KEY_SHOW_TIME, showtime);
             northernhemi = Settings.getBoolean(context, Settings.KEY_NORTHERNHEMI, northernhemi);
+            roundwatch = Settings.getBoolean(context, Settings.KEY_ROUNDWATCH, roundwatch);
 
             Log.d(TAG, "clockSize: "+clockSize);
             Log.d(TAG, "clocknosecsSize: "+clocknosecsSize);
 
             Log.d(TAG, "showtime: "+showtime);
             Log.d(TAG, "northernhemi: "+northernhemi);
+            Log.d(TAG, "roundwatch: "+roundwatch);
 
             mDate = new Date();
 
@@ -593,8 +588,13 @@ public class WatchFace extends CanvasWatchFaceService  {
             float xWeather, yWeather;
 
 
-            xDatestamp = width / 2f;
-            yDatestamp = 25;
+            if (!roundwatch) {
+                xDatestamp = width / 2f;
+                yDatestamp = 25;
+            } else {
+                xDatestamp = width / 2f;
+                yDatestamp = 75;
+            }
 
             xPeriod = width - mPadding;
             yPeriod = height / 2f;
@@ -606,17 +606,37 @@ public class WatchFace extends CanvasWatchFaceService  {
             yClocknosecs = height / 2f;
 
             xTimestamp = width / 2f;
-            yTimestamp = height - 4;
 
-            if (temponright) {
-                xTemp = (width / 2f) + 90;
-                yTemp = height - 80;
+            if (!roundwatch) {
+                yTimestamp = height - 4;
             } else {
-                xTemp = 50;
-                yTemp = height - 80;
+                yTimestamp = height - 18;
+            }
+
+            if (!roundwatch) {
+                if (temponright) {
+                    xTemp = (width / 2f) + 90;
+                    yTemp = height - 80;
+                } else {
+                    xTemp = 50;
+                    yTemp = height - 80;
+                }
+            } else {
+
+                if (temponright) {
+                    xTemp = (width / 2f) + 120;
+                    yTemp = height - 130;
+                } else {
+                    xTemp = 93;
+                    yTemp = height - 130;
+                }
             }
             xWeather = width / 2f;
-            yWeather = height - 30;
+            if (!roundwatch) {
+                yWeather = height - 30;
+            } else {
+                yWeather = height / 2f + 160;
+            }
 
 
             if (cardPeekRectangle.top == 0) {
@@ -764,7 +784,7 @@ public class WatchFace extends CanvasWatchFaceService  {
                 unregisterReceiver();
                 if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
                     Wearable.DataApi.removeListener(mGoogleApiClient, this);
-                    Wearable.NodeApi.removeListener(mGoogleApiClient, this);
+                    //Wearable.NodeApi.removeListener(mGoogleApiClient, this);
                     mGoogleApiClient.disconnect();
                 }
             }
@@ -891,6 +911,11 @@ public class WatchFace extends CanvasWatchFaceService  {
 
             }
 
+            if (config.containsKey(Settings.KEY_ROUNDWATCH)) {
+                roundwatch = config.getBoolean(Settings.KEY_ROUNDWATCH);
+                Log.d(TAG, "roundwatch: "+roundwatch);
+
+            }
 
             Log.d(TAG, "fetchConfig clockSize: "+clockSize);
             Log.d(TAG, "fetchConfig clocknosecsSize: "+clocknosecsSize);
@@ -904,7 +929,7 @@ public class WatchFace extends CanvasWatchFaceService  {
 
             Log.d(TAG, "fetchConfig showtime: "+showtime);
             Log.d(TAG, "fetchConfig northernhemi: "+northernhemi);
-
+            Log.d(TAG, "fetchConfig roundwatch: "+roundwatch);
 
             invalidate();
         }
@@ -1112,17 +1137,26 @@ public class WatchFace extends CanvasWatchFaceService  {
 
             Drawable moonDrawable = resources.getDrawable(IMAGE_LOOKUP[phaseValue]);
 
+            int moonleft = 23;
+            int moontop = 23;
+
+            if (roundwatch) {
+                moonleft = 75;
+                moontop = 90;
+            }
+
+
             if (northernhemi) {
                 mMoonBitmap = ((BitmapDrawable) moonDrawable).getBitmap();
                 mMoonResizedBitmap = Bitmap.createScaledBitmap(mMoonBitmap, 73, 73, false);
-                canvas.drawBitmap(mMoonResizedBitmap, 23, 23, null);
+                canvas.drawBitmap(mMoonResizedBitmap, moonleft, moontop, null);
             } else {
                 Matrix matrix = new Matrix();
                 matrix.postRotate(180);
                 mMoonBitmap = ((BitmapDrawable) moonDrawable).getBitmap();
                 mMoonResizedBitmap = Bitmap.createScaledBitmap(mMoonBitmap, 73, 73, false);
                 Bitmap mMoonrotatedBitmap = Bitmap.createBitmap(mMoonResizedBitmap, 0, 0, mMoonResizedBitmap.getWidth(), mMoonResizedBitmap.getHeight(), matrix, true);
-                canvas.drawBitmap(mMoonrotatedBitmap, 23, 23, null);
+                canvas.drawBitmap(mMoonrotatedBitmap, moonleft, moontop, null);
 
             }
         }
@@ -1225,34 +1259,62 @@ public class WatchFace extends CanvasWatchFaceService  {
             float centerX = ((float) width) / 2.0f;
             float centerY = ((float) height) / 2.0f;
             float setclock = 3.0f;
+
+            int clockspace = 1;
+            int clockwidth = 33;
+            int clockheight = 43;
+            int colonwidth = 18;
+            float clocktop = 113.0f;
+
+        //I hate round watches!
+        if (roundwatch) {
+            Log.i(TAG, "My watch is round " + roundwatch);
+            clockspace = 30;
+            clockwidth = 43;
+            clockheight = 53;
+            colonwidth = 28;
+            clocktop = 175.0f;
+        }
+
+
+
             Resources resources = WatchFace.this.getResources();
             String textTime = new SimpleDateFormat("hh:mm:ss").format(new Date());
             int ampm = Calendar.getInstance().get(Calendar.AM_PM);
             String logstring = textTime + " " + ampm;
             Log.i(TAG, "my screen size: width: " + width + " height: " + height);
             Log.i(TAG, "My Clock Image built with " + logstring);
+
+
+            Bitmap clearBitmap = ((BitmapDrawable) resources.getDrawable(R.drawable.nc)).getBitmap();
+            Bitmap resizeclearBitmap = Bitmap.createScaledBitmap(clearBitmap, clockspace, clockheight, false);
+
+            setclock = setclock + resizeclearBitmap.getWidth();
+            Log.i(TAG, "setclock: " + setclock);
+
             Bitmap hour1Bitmap = ((BitmapDrawable) resources.getDrawable(this.CLOCKNUMBERS[Character.getNumericValue(textTime.charAt(0))])).getBitmap();
-            Bitmap resizehour1Bitmap = Bitmap.createScaledBitmap(hour1Bitmap, 33, 43, false);
+            Bitmap resizehour1Bitmap = Bitmap.createScaledBitmap(hour1Bitmap, clockwidth, clockheight, false);
             if (Character.getNumericValue(textTime.charAt(0)) == 1) {
-                canvas.drawBitmap(resizehour1Bitmap, 3.0f, 113.0f, null);
+                canvas.drawBitmap(resizehour1Bitmap, setclock, clocktop, null);
             } else {
                 setclock = (float) (-(hour1Bitmap.getWidth() / 2));
             }
             Log.i(TAG, "bitmap width: " + hour1Bitmap.getWidth());
-            Bitmap resizehour2Bitmap = Bitmap.createScaledBitmap(((BitmapDrawable) resources.getDrawable(this.CLOCKNUMBERS[Character.getNumericValue(textTime.charAt(1))])).getBitmap(), 33, 43, false);
-            canvas.drawBitmap(resizehour2Bitmap, ((float) resizehour1Bitmap.getWidth()) + setclock, 113.0f, null);
-            Bitmap resizecolonBitmap = Bitmap.createScaledBitmap(((BitmapDrawable) resources.getDrawable(R.drawable.dot)).getBitmap(), 18, 43, false);
-            canvas.drawBitmap(resizecolonBitmap, (((float) resizehour1Bitmap.getWidth()) + setclock) + ((float) resizehour2Bitmap.getWidth()), 113.0f, null);
-            Bitmap resizeminute1Bitmap = Bitmap.createScaledBitmap(((BitmapDrawable) resources.getDrawable(this.CLOCKNUMBERS[Character.getNumericValue(textTime.charAt(3))])).getBitmap(), 33, 43, false);
-            canvas.drawBitmap(resizeminute1Bitmap, ((((float) resizehour1Bitmap.getWidth()) + setclock) + ((float) resizehour2Bitmap.getWidth())) + ((float) resizecolonBitmap.getWidth()), 113.0f, null);
-            Bitmap resizeminute2Bitmap = Bitmap.createScaledBitmap(((BitmapDrawable) resources.getDrawable(this.CLOCKNUMBERS[Character.getNumericValue(textTime.charAt(4))])).getBitmap(), 33, 43, false);
-            canvas.drawBitmap(resizeminute2Bitmap, (((((float) resizehour1Bitmap.getWidth()) + setclock) + ((float) resizehour2Bitmap.getWidth())) + ((float) resizecolonBitmap.getWidth())) + ((float) resizeminute1Bitmap.getWidth()), 113.0f, null);
-            canvas.drawBitmap(resizecolonBitmap, ((((((float) resizehour1Bitmap.getWidth()) + setclock) + ((float) resizehour2Bitmap.getWidth())) + ((float) resizecolonBitmap.getWidth())) + ((float) resizeminute1Bitmap.getWidth())) + ((float) resizeminute2Bitmap.getWidth()), 113.0f, null);
-            Bitmap resizeseconds1Bitmap = Bitmap.createScaledBitmap(((BitmapDrawable) resources.getDrawable(this.CLOCKNUMBERS[Character.getNumericValue(textTime.charAt(6))])).getBitmap(), 33, 43, false);
-            canvas.drawBitmap(resizeseconds1Bitmap, (((((((float) resizehour1Bitmap.getWidth()) + setclock) + ((float) resizehour2Bitmap.getWidth())) + ((float) resizecolonBitmap.getWidth())) + ((float) resizeminute1Bitmap.getWidth())) + ((float) resizeminute2Bitmap.getWidth())) + ((float) resizecolonBitmap.getWidth()), 113.0f, null);
-            Bitmap resizeseconds2Bitmap = Bitmap.createScaledBitmap(((BitmapDrawable) resources.getDrawable(this.CLOCKNUMBERS[Character.getNumericValue(textTime.charAt(7))])).getBitmap(), 33, 43, false);
-            canvas.drawBitmap(resizeseconds2Bitmap, ((((((((float) resizehour1Bitmap.getWidth()) + setclock) + ((float) resizehour2Bitmap.getWidth())) + ((float) resizecolonBitmap.getWidth())) + ((float) resizeminute1Bitmap.getWidth())) + ((float) resizeminute2Bitmap.getWidth())) + ((float) resizecolonBitmap.getWidth())) + ((float) resizeseconds1Bitmap.getWidth()), 113.0f, null);
-            canvas.drawBitmap(Bitmap.createScaledBitmap(((BitmapDrawable) resources.getDrawable(this.AMPM[ampm])).getBitmap(), 33, 43, false), (((((((((float) resizehour1Bitmap.getWidth()) + setclock) + ((float) resizehour2Bitmap.getWidth())) + ((float) resizecolonBitmap.getWidth())) + ((float) resizeminute1Bitmap.getWidth())) + ((float) resizeminute2Bitmap.getWidth())) + ((float) resizecolonBitmap.getWidth())) + ((float) resizeseconds1Bitmap.getWidth())) + ((float) resizeseconds2Bitmap.getWidth()), 113.0f, null);
+
+            Bitmap resizehour2Bitmap = Bitmap.createScaledBitmap(((BitmapDrawable) resources.getDrawable(this.CLOCKNUMBERS[Character.getNumericValue(textTime.charAt(1))])).getBitmap(), clockwidth, clockheight, false);
+            canvas.drawBitmap(resizehour2Bitmap, ((float) resizehour1Bitmap.getWidth()) + setclock, clocktop, null);
+            Bitmap resizecolonBitmap = Bitmap.createScaledBitmap(((BitmapDrawable) resources.getDrawable(R.drawable.dot)).getBitmap(), colonwidth, clockheight, false);
+            canvas.drawBitmap(resizecolonBitmap, (((float) resizehour1Bitmap.getWidth()) + setclock) + ((float) resizehour2Bitmap.getWidth()), clocktop, null);
+            Bitmap resizeminute1Bitmap = Bitmap.createScaledBitmap(((BitmapDrawable) resources.getDrawable(this.CLOCKNUMBERS[Character.getNumericValue(textTime.charAt(3))])).getBitmap(), clockwidth, clockheight, false);
+            canvas.drawBitmap(resizeminute1Bitmap, ((((float) resizehour1Bitmap.getWidth()) + setclock) + ((float) resizehour2Bitmap.getWidth())) + ((float) resizecolonBitmap.getWidth()), clocktop, null);
+            Bitmap resizeminute2Bitmap = Bitmap.createScaledBitmap(((BitmapDrawable) resources.getDrawable(this.CLOCKNUMBERS[Character.getNumericValue(textTime.charAt(4))])).getBitmap(), clockwidth, clockheight, false);
+            canvas.drawBitmap(resizeminute2Bitmap, (((((float) resizehour1Bitmap.getWidth()) + setclock) + ((float) resizehour2Bitmap.getWidth())) + ((float) resizecolonBitmap.getWidth())) + ((float) resizeminute1Bitmap.getWidth()), clocktop, null);
+            canvas.drawBitmap(resizecolonBitmap, ((((((float) resizehour1Bitmap.getWidth()) + setclock) + ((float) resizehour2Bitmap.getWidth())) + ((float) resizecolonBitmap.getWidth())) + ((float) resizeminute1Bitmap.getWidth())) + ((float) resizeminute2Bitmap.getWidth()), clocktop, null);
+            Bitmap resizeseconds1Bitmap = Bitmap.createScaledBitmap(((BitmapDrawable) resources.getDrawable(this.CLOCKNUMBERS[Character.getNumericValue(textTime.charAt(6))])).getBitmap(), clockwidth, clockheight, false);
+            canvas.drawBitmap(resizeseconds1Bitmap, (((((((float) resizehour1Bitmap.getWidth()) + setclock) + ((float) resizehour2Bitmap.getWidth())) + ((float) resizecolonBitmap.getWidth())) + ((float) resizeminute1Bitmap.getWidth())) + ((float) resizeminute2Bitmap.getWidth())) + ((float) resizecolonBitmap.getWidth()), clocktop, null);
+            Bitmap resizeseconds2Bitmap = Bitmap.createScaledBitmap(((BitmapDrawable) resources.getDrawable(this.CLOCKNUMBERS[Character.getNumericValue(textTime.charAt(7))])).getBitmap(), clockwidth, clockheight, false);
+            canvas.drawBitmap(resizeseconds2Bitmap, ((((((((float) resizehour1Bitmap.getWidth()) + setclock) + ((float) resizehour2Bitmap.getWidth())) + ((float) resizecolonBitmap.getWidth())) + ((float) resizeminute1Bitmap.getWidth())) + ((float) resizeminute2Bitmap.getWidth())) + ((float) resizecolonBitmap.getWidth())) + ((float) resizeseconds1Bitmap.getWidth()), clocktop, null);
+            canvas.drawBitmap(Bitmap.createScaledBitmap(((BitmapDrawable) resources.getDrawable(this.AMPM[ampm])).getBitmap(), clockwidth, clockheight, false), (((((((((float) resizehour1Bitmap.getWidth()) + setclock) + ((float) resizehour2Bitmap.getWidth())) + ((float) resizecolonBitmap.getWidth())) + ((float) resizeminute1Bitmap.getWidth())) + ((float) resizeminute2Bitmap.getWidth())) + ((float) resizecolonBitmap.getWidth())) + ((float) resizeseconds1Bitmap.getWidth())) + ((float) resizeseconds2Bitmap.getWidth()), clocktop, null);
         }
 
         private final int[] CLOCKNUMBERS = {
@@ -1285,8 +1347,16 @@ public class WatchFace extends CanvasWatchFaceService  {
             Log.i(TAG, "in weathericon() res: " + res);
             Drawable IconDrawable = resources.getDrawable(res);
             mIconBitmap = ((BitmapDrawable) IconDrawable).getBitmap();
-            mIconResizedBitmap = Bitmap.createScaledBitmap(mIconBitmap, 100, 70, false);
-            canvas.drawBitmap(mIconResizedBitmap, 90, 160, null);
+            if (!roundwatch) {
+                mIconResizedBitmap = Bitmap.createScaledBitmap(mIconBitmap, 100, 70, false);
+            } else {
+                mIconResizedBitmap = Bitmap.createScaledBitmap(mIconBitmap, 150, 120, false);
+            }
+            if (!roundwatch) {
+                canvas.drawBitmap(mIconResizedBitmap, 90, 160, null);
+            } else {
+                canvas.drawBitmap(mIconResizedBitmap, width / 2f -75, height / 2f + 18, null);
+            }
 
         }
 

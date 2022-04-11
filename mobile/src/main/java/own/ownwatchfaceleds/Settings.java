@@ -7,7 +7,6 @@ import android.preference.PreferenceManager;
 public class Settings {
     public static final String TAG = "ownwatchface";
     public static final int gpsinterval = 60000;
-    public static final int interval = 1800000;
     public static final String KEY_CLOCK_SIZE = "clock_size";
     public static final String KEY_CLOCK_ACT = "clock_act";
     public static final String KEY_CLOCK_DIM = "clock_dim";
@@ -25,6 +24,7 @@ public class Settings {
     public static final String KEY_ALWAYS_UTC = "always_utc";
     public static final String KEY_SHOW_TIME = "show_time";
     public static final String KEY_NORTHERNHEMI = "northernhemi";
+    public static final String KEY_ROUNDWATCH = "roundwatch";
     public static final String KEY_LAT = "lat";
     public static final String KEY_LON = "lon";
     public static final String KEY_TEMP = "temp";
@@ -34,7 +34,6 @@ public class Settings {
     public static final String KEY_TEMP_DIM = "temp_dim";
     public static final String KEY_WEATHER_SIZE = "weather_size";
     public static final String KEY_WEATHER_DIM = "weather_dim";
-    public static final String KEY_WEATHER_UPDATE_TIME = "Update_Time";
     public static final String PATH_CONFIG = "/ownwatchfaceleds/Config/";
     public static final String PATH_WEATHER_INFO = "/ownwatchfaceleds/WeatherInfo";
     public static final String PATH_WEATHER_REQUIRE = "/ownwatchfaceleds/Require";
