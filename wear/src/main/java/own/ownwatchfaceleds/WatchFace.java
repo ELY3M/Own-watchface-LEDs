@@ -1138,7 +1138,7 @@ public class WatchFace extends CanvasWatchFaceService  {
             Drawable moonDrawable = resources.getDrawable(IMAGE_LOOKUP[phaseValue]);
 
             int moonleft = 23;
-            int moontop = 23;
+            int moontop = 33;
 
             if (roundwatch) {
                 moonleft = 75;
