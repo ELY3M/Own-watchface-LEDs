@@ -7,45 +7,25 @@ import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Environment;
 import android.os.StrictMode;
 import android.os.Bundle;
 import android.support.wearable.companion.WatchFaceCompanion;
 import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
 import javax.net.ssl.HttpsURLConnection;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataMap;
-import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageApi;
-import com.google.android.gms.wearable.Node;
-import com.google.android.gms.wearable.NodeApi;
-import com.google.android.gms.wearable.PutDataMapRequest;
-import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
@@ -69,7 +49,7 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
 
 
     private static final String TAG = "ownwatchface Main";
-
+    private static String agent = "my own written app email: elymbmx@gmail.com";
     private String url = "https://forecast.weather.gov/MapClick.php?";
     private String finalurl = "setup";
     private String visiturl = "setup";
@@ -534,18 +514,6 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
                 updatecount++;
                 String LogString = "Temp : " + mytemp + " Icon: " + myicon + " Weather: " + myweather + "\nLast Update: " + mytimestamp + "\nUpdate Count: " + updatecount;
                 Log.i(TAG, LogString);
-                try {
-                    FileWriter writer = new FileWriter(Environment.getExternalStorageDirectory().getAbsolutePath() + "/ownwatchleds-updates.txt", true);
-                    BufferedWriter bufferedWriter = new BufferedWriter(writer);
-                    bufferedWriter.write(LogString);
-                    bufferedWriter.newLine();
-                    bufferedWriter.write("-------------------------------------------------------------------");
-                    bufferedWriter.newLine();
-                    bufferedWriter.close();
-                } catch (IOException e) {
-                    Log.i(TAG, "writer crash..." + e);
-                    e.printStackTrace();
-                }
 
 
                 /*
@@ -598,12 +566,16 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
                     return false;
                 }
                 try {
-                    URL url = new URL("https://www.weather.gov/");
+                    URL url = new URL("https://www.weather.gov");
                     HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
                     try {
-                        con.connect();
+                        //con.connect();
+                        con.setRequestMethod("GET");
+                        con.setRequestProperty("User-Agent", agent);
+                        con.setRequestProperty("Accept", "text/html");
+                        con.setRequestProperty("Accept-Language", "en-US");
                         Log.i(TAG, "url connect response code: " + con.getResponseCode());
-                        if (con.getResponseCode() == 200){
+                        if (con.getResponseCode() == 200) {
                             Log.i(TAG, "Connection test passed");
                             return true;
                         }
