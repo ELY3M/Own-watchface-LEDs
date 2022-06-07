@@ -116,8 +116,6 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
     private TextView temp;
     private TextView weather;
     private ImageView icon;
-    private TextView checkicon;
-    private TextView checkfinalicon;
     private TextView lastupdatetime;
     private Button applyButton;
     private Button resetButton;
@@ -181,8 +179,6 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
         temp = (TextView) findViewById(R.id.temp);
         weather = (TextView) findViewById(R.id.weather);
         icon = (ImageView) findViewById(R.id.icon);
-        checkicon = (TextView) findViewById(R.id.checkicon);
-        checkfinalicon = (TextView) findViewById(R.id.checkiconurl);
         lastupdatetime = (TextView) findViewById(R.id.lastupdatetime);
         refreshweather = (Button) findViewById(R.id.refreshweather);
         visitnws = (Button) findViewById(R.id.visitnws);
@@ -493,8 +489,9 @@ public class Main extends Activity implements ConnectionCallbacks, OnConnectionF
                 weather.setText(myweather);
                 int res = getResources().getIdentifier(finalicon, "drawable", getApplicationContext().getPackageName());
                 icon.setImageResource(res);
-                checkicon.setText(myicon);
-                checkfinalicon.setText(finalicon);
+                //checkicon.setText(myicon);
+                //checkfinalicon.setText(finalicon);
+                Log.i(TAG, "myicon: " + myicon);
                 Log.i(TAG, "finalicon: " + finalicon);
                 //saveValues();
                 //pushValuesToWearable();
